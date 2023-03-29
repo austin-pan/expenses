@@ -3,16 +3,17 @@
 Download CalTrain order history screenshots and upload them to SAP Concur
 under a new expense report!
 
-# Requirements
+## Requirements
 
 - Selenium Server Standalone
   ```shell
   brew install selenium-server
   ```
-  - Java
+  - Java (1.8+)
     ```shell
     brew install openjdk@11
-    # Will need to symlink Java (if installing Java for the first time): 
+    # Will need to symlink Java if installing Java for the first 
+    # time (as specified in brew install's caveats): 
     sudo ln -sfn /opt/homebrew/opt/openjdk@11/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk-11.jdk
     ```
 - Selenium
@@ -28,7 +29,7 @@ under a new expense report!
     brew install geckodriver
     ```
 
-# Tutorial
+## Tutorial
 
 This repository consists of two scripts. The first script
 takes screenshots of CalTrain transaction receipts and the second script uploads
@@ -39,7 +40,7 @@ manually through the opened web browser and the second script does not automatic
 submit the expense report in case you want to manually add more expenses or verify 
 the report.
 
-## CalTrain Tickets
+### CalTrain Tickets
 
 Takes a screenshot of each CalTrain ticket up to the specified last order number. The
 screenshots are saved to the specified output directory in the format of 
@@ -64,7 +65,7 @@ options:
   -d DATE, --date DATE  optional. The date (MM/DD/YYYY) to stop crawling at, exclusive
 ```
 
-### Examples
+#### Examples
 
 Download all CalTrain orders after March 4th, 2023 into `~/Downloads/caltrain`
 ```shell
@@ -76,7 +77,7 @@ Download all CalTrain orders into `~/Downloads/caltrain`
 $ python3 tickets.py -o ~/Downloads/caltrain
 ```
 
-## SAP Concur
+### SAP Concur
 
 Uploads all images in the specified input directory into SAP Concur. The image names are
 parsed by splitting on `_` (underscore) to retrieve date and price information which are
@@ -103,7 +104,7 @@ options:
                         the directory with receipts to upload
 ```
 
-### Example
+#### Example
 
 Create an expense report and add an expense for every receipt in `~/Downloads/caltrain`
 ```shell
