@@ -42,7 +42,7 @@ the report.
 
 ### CalTrain Tickets
 
-Takes a screenshot of each CalTrain ticket up to the specified last order number. The
+Takes a screenshot of each CalTrain ticket up to the specified cutoff date. The
 screenshots are saved to the specified output directory in the format of 
 `{orderNumber}_{date}_{price}.png`.
 
@@ -92,11 +92,11 @@ all expenses, the script will hang until the report page is exited, e.g. by
 submitting the report or navigating to any other page, after which the browser
 will close itself.
 
-```shell
+```
 $ python3 concur.py -h
 usage: concur.py [-h] [-i INPUT]
 
-create an SAP Concur expense report
+Create an SAP Concur expense report.
 
 options:
   -h, --help            show this help message and exit
