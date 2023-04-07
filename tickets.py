@@ -15,6 +15,17 @@ caltrain_orders_url = "https://caltrain.transitsherpa.com/rider-web/account/hist
 
 
 def traverse_pages(driver: WebDriver, func: Optional[Callable[[Any], bool]] = None, *args, **kwargs) -> int:
+    """
+    Traverse CalTrain orders pages by clicking on the "Next Page" button. At each page, apply `func`. If `func` returns
+    `False`, stop traversing early.
+
+    :param driver: Current web driver
+    :param func: Function to apply at each page traversed that returns a `bool`. If `func` returns `False`, stop
+    traversing pages early
+    :param args: Positional arguments to provide to `func`
+    :param kwargs: Keyword arguments to provide to `func`
+    :return: Number of pages traversed
+    """
     num_pages = 0
     while True:
         num_pages += 1
@@ -38,6 +49,15 @@ def traverse_pages(driver: WebDriver, func: Optional[Callable[[Any], bool]] = No
 
 
 def save_page_orders(driver: WebDriver, output_dir: str, last_date: Optional[str] = None) -> bool:
+    """
+    Take screenshots of each CalTrain order in a page chronologically starting from the latest order until the
+    specified date. If `last_date` is not specified or reached in this page, save every CalTrain order of this page.
+
+    :param driver: Current web driver
+    :param output_dir: Directory to save screenshots to
+    :param last_date: Date to stop saving orders at, exclusive
+    :return: `True` if `last_date` has not been reached yet, otherwise `False`
+    """
     # Hide the footer
     driver.execute_script('arguments[0].style.display="none";', driver.find_element(By.CSS_SELECTOR, "footer"))
 
@@ -65,11 +85,28 @@ def save_page_orders(driver: WebDriver, output_dir: str, last_date: Optional[str
 
 
 def save_orders(driver: WebDriver, output_dir: str, last_date: Optional[str] = None) -> None:
+    """
+    Take screenshots of each CalTrain order chronologically starting from the latest order until the specified date. If
+    `last_date` is not specified, save every CalTrain order.
+
+    :param driver: Current web driver
+    :param output_dir: Directory to save screenshots to
+    :param last_date: Date to stop saving orders at, exclusive
+    :return: None
+    """
     WebDriverWait(driver, 60).until(lambda d: d.find_element(By.CSS_SELECTOR, "div.ngCanvas"))
     traverse_pages(driver, save_page_orders, driver, output_dir, last_date)
 
 
-def run(output_dir: str, last_date: Optional[str] = None):
+def run(output_dir: str, last_date: Optional[str] = None) -> None:
+    """
+    Run CalTrain order saving pipeline. Opens CalTrain login page and waits for user to log in. Afterwards, automates
+    taking screenshots of each CalTrain order.
+
+    :param output_dir: Directory to save screenshots to
+    :param last_date: Date to stop saving orders at, exclusive
+    :return: None
+    """
     driver = crawl.init_driver()
 
     try:

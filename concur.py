@@ -13,19 +13,28 @@ from crawler import crawl
 concur_login_url = "https://www.concursolutions.com/"
 
 
-def start_report(driver: WebDriver):
+def start_report(driver: WebDriver) -> None:
+    """
+    Start an SAP Concur expense report.
+    """
     start_report_button = WebDriverWait(driver, 60).until(lambda d: d.find_element(By.LINK_TEXT, "Start a Report"))
     crawl.scroll_and_click_element(driver, start_report_button)
 
+    # Click on walk-through pop-up button
     walkthru_button = WebDriverWait(driver, 60).until(lambda d: d.find_element(By.CSS_SELECTOR, "span.walkme-custom-balloon-button-text"))
     crawl.scroll_and_click_element(driver, walkthru_button)
 
+    # Set report name
     report_name_field = WebDriverWait(driver, 60).until(lambda d: d.find_element(By.CSS_SELECTOR, "input#name"))
     crawl.set_field(report_name_field, "Palo Alto CalTrain Parking")
     report_name_field.submit()
 
 
 def process_transactions(input_dir: str) -> List[Tuple[str, str, str]]:
+    """
+    Get metadata of each order receipt in `input_dir`. This is done by parsing the filenames which are formatted as
+    "{order id}_{date}_{price}.png".
+    """
     transactions = []
     for filename in os.listdir(input_dir):
         if filename == ".DS_Store":
@@ -38,7 +47,15 @@ def process_transactions(input_dir: str) -> List[Tuple[str, str, str]]:
     return sorted(transactions, key=lambda x: crawl.get_comparable_date(x[1], "/"))
 
 
-def add_expense(driver: WebDriver, input_dir: str, transaction: Tuple[str, str, str]):
+def add_expense(driver: WebDriver, input_dir: str, transaction: Tuple[str, str, str]) -> None:
+    """
+    Fill out an "Add Expense" popup. Fills out date and amount fields and uploads order receipt image.
+
+    :param driver: Current web driver
+    :param input_dir: Directory where order receipt images are stored
+    :param transaction: Transaction metadata as a 3-tuple of order id, date, and price
+    :return: None
+    """
     (filename, date, amount) = transaction
 
     transaction_date_field = WebDriverWait(driver, 60).until(lambda d: d.find_element(By.CSS_SELECTOR, 'input[name="transactionDate"]'))
@@ -52,7 +69,15 @@ def add_expense(driver: WebDriver, input_dir: str, transaction: Tuple[str, str, 
     crawl.upload_image(driver, add_receipt_button, image_path)
 
 
-def add_expenses(driver: WebDriver, input_dir: str):
+def add_expenses(driver: WebDriver, input_dir: str) -> None:
+    """
+    Add all expenses in `input_dir` to expense report. Each order is added as a separate "Parking" expense and is added
+    with transaction date, amount, and receipt image.
+
+    :param driver: Current web driver
+    :param input_dir: Directory with all order receipts to expense
+    :return: None
+    """
     transactions = process_transactions(input_dir)
     for transaction in tqdm.tqdm(transactions):
         add_expense_button = WebDriverWait(driver, 60).until(lambda d: d.find_element(By.CSS_SELECTOR, 'span[data-trans-id="Expense.addExpense"]'))
@@ -69,7 +94,13 @@ def add_expenses(driver: WebDriver, input_dir: str):
         crawl.scroll_and_click_element(driver, save_expense_button)
 
 
-def run(input_dir: str):
+def run(input_dir: str) -> None:
+    """
+    Create an SAP Concur expense report and add expenses to it.
+
+    :param input_dir: The directory with order receipts to upload to the expense report
+    :return: None
+    """
     driver = crawl.init_driver()
     try:
         print(f"Navigating to {concur_login_url}...")
@@ -81,6 +112,7 @@ def run(input_dir: str):
         print(f"Adding expenses...")
         add_expenses(driver, input_dir)
 
+        # Wait until "Submit Report" button is no longer visible before exiting
         WebDriverWait(driver, 60).until(lambda d: d.find_element(By.CSS_SELECTOR, 'button[data-nuiexp="reportActionButtons.submitButton"]'))
         WebDriverWait(driver, 3600).until_not(lambda d: d.find_element(By.CSS_SELECTOR, 'button[data-nuiexp="reportActionButtons.submitButton"]'))
     finally:
