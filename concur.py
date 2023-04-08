@@ -112,9 +112,7 @@ def run(input_dir: str) -> None:
         print(f"Adding expenses...")
         add_expenses(driver, input_dir)
 
-        # Wait until "Submit Report" button is no longer visible before exiting
-        WebDriverWait(driver, 60).until(lambda d: d.find_element(By.CSS_SELECTOR, 'button[data-nuiexp="reportActionButtons.submitButton"]'))
-        WebDriverWait(driver, 3600).until_not(lambda d: d.find_element(By.CSS_SELECTOR, 'button[data-nuiexp="reportActionButtons.submitButton"]'))
+        input("Press ENTER to exit: ")
     finally:
         time.sleep(1)
         driver.quit()

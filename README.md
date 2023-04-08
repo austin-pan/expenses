@@ -88,9 +88,7 @@ the SAP Concur login page and wait. Once you've logged in, the script will start
 expense report and then add an expense for each image in the specified input directory.
 The script files each expense as a *parking* expense, fills in date and price
 information, and uploads the corresponding image as the receipt. After uploading
-all expenses, the script will hang until the report page is exited, e.g. by
-submitting the report or navigating to any other page, after which the browser
-will close itself.
+all expenses, the script will hang until ENTER is pressed in the terminal.
 
 ```
 $ python3 concur.py -h
