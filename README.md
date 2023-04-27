@@ -52,16 +52,17 @@ to the order history page and take a screenshot of each transaction until the
 specified date (or to the end if no date is specified). After all screenshots 
 have been taken, the browser will close itself.
 
-```shell
+```
 $ python3 tickets.py -h
-usage: tickets.py [-h] -o OUTPUT [-d DATE]
+usage: tickets.py [-h] [-d DATE] output
 
 Take screenshots of CalTrain orders.
 
+positional arguments:
+  output                the directory to save screenshots to
+
 options:
   -h, --help            show this help message and exit
-  -o OUTPUT, --output OUTPUT
-                        the directory to save screenshots to
   -d DATE, --date DATE  optional. The date (MM/DD/YYYY) to stop crawling at, exclusive
 ```
 
@@ -69,12 +70,12 @@ options:
 
 Download all CalTrain orders after March 4th, 2023 into `~/Downloads/caltrain`
 ```shell
-$ python3 tickets.py -o ~/Downloads/caltrain -d 03/04/2023
+$ python3 tickets.py -d 03/04/2023 ~/Downloads/caltrain
 ```
 
 Download all CalTrain orders into `~/Downloads/caltrain`
 ```shell
-$ python3 tickets.py -o ~/Downloads/caltrain
+$ python3 tickets.py ~/Downloads/caltrain
 ```
 
 ### SAP Concur
@@ -92,19 +93,20 @@ all expenses, the script will hang until ENTER is pressed in the terminal.
 
 ```
 $ python3 concur.py -h
-usage: concur.py [-h] [-i INPUT]
+usage: concur.py [-h] input
 
 Create an SAP Concur expense report.
 
+positional arguments:
+  input       the directory with receipts to upload
+
 options:
-  -h, --help            show this help message and exit
-  -i INPUT, --input INPUT
-                        the directory with receipts to upload
+  -h, --help  show this help message and exit
 ```
 
 #### Example
 
 Create an expense report and add an expense for every receipt in `~/Downloads/caltrain`
 ```shell
-python3 concur.py -i ~/Downloads/caltrain
+python3 concur.py ~/Downloads/caltrain
 ```

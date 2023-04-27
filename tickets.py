@@ -125,7 +125,7 @@ def run(output_dir: str, last_date: Optional[str] = None) -> None:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Take screenshots of CalTrain orders.")
-    parser.add_argument("-o", "--output", required=True, type=str, help="the directory to save screenshots to")
+    parser.add_argument("output", type=str, help="the directory to save screenshots to")
     parser.add_argument("-d", "--date", default=None, type=str,
                         help="optional. The date (MM/DD/YYYY) to stop crawling at, exclusive")
     cmd = parser.parse_args()

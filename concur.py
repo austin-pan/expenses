@@ -120,6 +120,6 @@ def run(input_dir: str) -> None:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Create an SAP Concur expense report.")
-    parser.add_argument("-i", "--input", required=True, type=str, help="the directory with receipts to upload")
+    parser.add_argument("input", type=str, help="the directory with receipts to upload")
     cmd = parser.parse_args()
     run(os.path.expanduser(cmd.input))
