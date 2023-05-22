@@ -20,10 +20,6 @@ def start_report(driver: WebDriver) -> None:
     start_report_button = WebDriverWait(driver, 60).until(lambda d: d.find_element(By.LINK_TEXT, "Start a Report"))
     crawl.scroll_and_click_element(driver, start_report_button)
 
-    # Click on walk-through pop-up button
-    walkthru_button = WebDriverWait(driver, 60).until(lambda d: d.find_element(By.CSS_SELECTOR, "span.walkme-custom-balloon-button-text"))
-    crawl.scroll_and_click_element(driver, walkthru_button)
-
     # Set report name
     report_name_field = WebDriverWait(driver, 60).until(lambda d: d.find_element(By.CSS_SELECTOR, "input#name"))
     crawl.set_field(report_name_field, "Palo Alto CalTrain Parking")
@@ -88,7 +84,7 @@ def add_expenses(driver: WebDriver, input_dir: str) -> None:
 
         add_expense(driver, input_dir, transaction)
         # Wait for receipt image to load
-        WebDriverWait(driver, 60).until(lambda d: d.find_element(By.CSS_SELECTOR, 'button[title="Remove Receipt"]'))
+        WebDriverWait(driver, 60).until(lambda d: d.find_element(By.CSS_SELECTOR, 'button[data-nuiexp="receipt-viewer__detach"]'))
 
         save_expense_button = WebDriverWait(driver, 60).until(lambda d: d.find_element(By.CSS_SELECTOR, 'span[data-trans-id="expenseEntry.saveExpense"]'))
         crawl.scroll_and_click_element(driver, save_expense_button)
