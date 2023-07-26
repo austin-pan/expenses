@@ -54,10 +54,10 @@ def add_expense(driver: WebDriver, input_dir: str, transaction: Tuple[str, str, 
     """
     (filename, date, amount) = transaction
 
-    transaction_date_field = WebDriverWait(driver, 60).until(lambda d: d.find_element(By.CSS_SELECTOR, 'input[name="transactionDate"]'))
+    transaction_date_field = WebDriverWait(driver, 60).until(lambda d: d.find_element(By.CSS_SELECTOR, 'input[data-nuiexp="field-transactionDate"]'))
     crawl.set_field(transaction_date_field, date)
 
-    amount_field = WebDriverWait(driver, 60).until(lambda d: d.find_element(By.CSS_SELECTOR, 'input[name="transactionAmount"]'))
+    amount_field = WebDriverWait(driver, 60).until(lambda d: d.find_element(By.CSS_SELECTOR, 'input[data-nuiexp="field-transactionAmount"]'))
     crawl.set_field(amount_field, amount)
 
     add_receipt_button = WebDriverWait(driver, 60).until(lambda d: d.find_element(By.CSS_SELECTOR, "button.spend-common__drag-n-drop__button"))
@@ -86,7 +86,7 @@ def add_expenses(driver: WebDriver, input_dir: str) -> None:
         # Wait for receipt image to load
         WebDriverWait(driver, 60).until(lambda d: d.find_element(By.CSS_SELECTOR, 'button[data-nuiexp="receipt-viewer__detach"]'))
 
-        save_expense_button = WebDriverWait(driver, 60).until(lambda d: d.find_element(By.CSS_SELECTOR, 'span[data-trans-id="expenseEntry.saveExpense"]'))
+        save_expense_button = WebDriverWait(driver, 60).until(lambda d: d.find_element(By.CSS_SELECTOR, 'button[data-nuiexp="save-expense"]'))
         crawl.scroll_and_click_element(driver, save_expense_button)
 
 
