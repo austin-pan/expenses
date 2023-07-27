@@ -3,6 +3,7 @@ import os
 import time
 from typing import List, Tuple
 
+from selenium.common import TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.webdriver import WebDriver
 from selenium.webdriver.support.wait import WebDriverWait
@@ -19,6 +20,13 @@ def start_report(driver: WebDriver) -> None:
     """
     start_report_button = WebDriverWait(driver, 60).until(lambda d: d.find_element(By.LINK_TEXT, "Start a Report"))
     crawl.scroll_and_click_element(driver, start_report_button)
+
+    # Skip walk-through if prompted
+    try:
+        walkthru_button = WebDriverWait(driver, 10).until(lambda d: d.find_element(By.CSS_SELECTOR, "span.walkme-custom-balloon-button-text"))
+        crawl.scroll_and_click_element(driver, walkthru_button)
+    except TimeoutException:
+        pass
 
     # Set report name
     report_name_field = WebDriverWait(driver, 60).until(lambda d: d.find_element(By.CSS_SELECTOR, "input#name"))
