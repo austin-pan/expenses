@@ -23,7 +23,7 @@ def start_report(driver: WebDriver) -> None:
 
     # Skip walk-through if prompted
     try:
-        walkthru_button = WebDriverWait(driver, 10).until(lambda d: d.find_element(By.CSS_SELECTOR, "span.walkme-custom-balloon-button-text"))
+        walkthru_button = WebDriverWait(driver, 5).until(lambda d: d.find_element(By.CSS_SELECTOR, "span.walkme-custom-balloon-button-text"))
         crawl.scroll_and_click_element(driver, walkthru_button)
     except TimeoutException:
         pass
