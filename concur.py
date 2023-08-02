@@ -3,7 +3,7 @@ import os
 import time
 from typing import List, Tuple
 
-from selenium.common import TimeoutException
+from selenium.common import ElementNotInteractableException, TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.webdriver import WebDriver
 from selenium.webdriver.support.wait import WebDriverWait
@@ -25,6 +25,13 @@ def start_report(driver: WebDriver) -> None:
     try:
         walkthru_button = WebDriverWait(driver, 5).until(lambda d: d.find_element(By.CSS_SELECTOR, "span.walkme-custom-balloon-button-text"))
         crawl.scroll_and_click_element(driver, walkthru_button)
+    except TimeoutException:
+        pass
+
+    # Skip tour
+    try:
+        notification_cancel_button = WebDriverWait(driver, 5).until(lambda d: d.find_element(By.CSS_SELECTOR, "button.notification_cancel"))
+        crawl.scroll_and_click_element(driver, notification_cancel_button)
     except TimeoutException:
         pass
 
@@ -117,6 +124,11 @@ def run(input_dir: str) -> None:
         add_expenses(driver, input_dir)
 
         input("Press ENTER to exit: ")
+    except ElementNotInteractableException as e:
+        print(str(e))
+        error_path = "/tmp/expenses_error_screenshot.png"
+        driver.save_full_page_screenshot(error_path)
+        print(f"Error screenshot saved to {error_path}")
     finally:
         time.sleep(1)
         driver.quit()
