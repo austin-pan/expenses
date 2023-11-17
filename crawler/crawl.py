@@ -1,5 +1,7 @@
+import time
+
 from selenium import webdriver
-from selenium.common import ElementClickInterceptedException
+from selenium.common import ElementClickInterceptedException, ElementNotInteractableException
 from selenium.webdriver.firefox.webdriver import WebDriver
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.wait import WebDriverWait
@@ -79,7 +81,9 @@ def successful_click(element: WebElement) -> bool:
         element.location_once_scrolled_into_view
         element.click()
         return True
-    except ElementClickInterceptedException:
+    except (ElementNotInteractableException, ElementClickInterceptedException):
+        # Sleep so that this click doesn't get spammed
+        time.sleep(0.25)
         return False
 
 
