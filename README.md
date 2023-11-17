@@ -86,10 +86,12 @@ used to populate the relevant fields when adding expenses.
 
 When run, a browser window that is controlled by Selenium will open and navigate to
 the SAP Concur login page and wait. Once you've logged in, the script will start a new
-expense report and then add an expense for each image in the specified input directory.
-The script files each expense as a *parking* expense, fills in date and price
-information, and uploads the corresponding image as the receipt. After uploading
-all expenses, the script will hang until ENTER is pressed in the terminal.
+expense report and wait for the report details to be manually populated. Once the
+report has been created, the script will start adding expenses for each image in the
+specified input directory. The script files each expense as a *parking* expense, fills
+in date and price information, and uploads the corresponding transaction image as the
+attached receipt. After uploading all expenses, the script will hang until the browser
+window is closed.
 
 ```
 $ python3 concur.py -h
