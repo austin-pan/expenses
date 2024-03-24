@@ -5,6 +5,7 @@ under a new expense report!
 
 ## Requirements
 
+- Python >= 3.10
 - Selenium Server Standalone
   ```shell
   brew install selenium-server
@@ -12,8 +13,8 @@ under a new expense report!
   - Java (1.8+)
     ```shell
     brew install openjdk@11
-    # Will need to symlink Java if installing Java for the first 
-    # time (as specified in brew install's caveats): 
+    # Will need to symlink Java if installing Java for the first
+    # time (as specified in brew install's caveats):
     sudo ln -sfn /opt/homebrew/opt/openjdk@11/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk-11.jdk
     ```
 - Selenium
@@ -21,7 +22,7 @@ under a new expense report!
   python3 -m pip install selenium
   ```
 - Mozilla Firefox
-  ```shell 
+  ```shell
   brew install --cask firefox
   ```
   - Geckodriver
@@ -33,23 +34,23 @@ under a new expense report!
 
 This repository consists of two scripts. The first script
 takes screenshots of CalTrain transaction receipts and the second script uploads
-those receipts to SAP Concur. 
+those receipts to SAP Concur.
 
-The scripts are not 100% automated: you will have to log into each service 
+The scripts are not 100% automated: you will have to log into each service
 manually through the opened web browser and the second script does not automatically
-submit the expense report in case you want to manually add more expenses or verify 
+submit the expense report in case you want to manually add more expenses or verify
 the report.
 
 ### CalTrain Tickets
 
 Takes a screenshot of each CalTrain ticket up to the specified cutoff date. The
-screenshots are saved to the specified output directory in the format of 
+screenshots are saved to the specified output directory in the format of
 `{orderNumber}_{date}_{price}.png`.
 
 When run, a browser window that is controlled by Selenium will open and navigate to
-the CalTrain login page and wait. Once you've logged in, the script will navigate 
+the CalTrain login page and wait. Once you've logged in, the script will navigate
 to the order history page and take a screenshot of each transaction until the
-specified date (or to the end if no date is specified). After all screenshots 
+specified date (or to the end if no date is specified). After all screenshots
 have been taken, the browser will close itself.
 
 ```
