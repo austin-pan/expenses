@@ -67,8 +67,9 @@ def get_comparable_date(date: str, sep: str) -> list[str]:
 
 def scroll_and_click_element(driver: WebDriver, element: WebElement) -> None:
     """
-    Wait until element is clicked successfully.
+    Scroll to element and then wait until element is clicked successfully.
     """
+    driver.execute_script('arguments[0].scrollIntoView(false)', element)
     WebDriverWait(driver, 60).until(lambda _: successful_click(element))
 
 
@@ -77,8 +78,6 @@ def successful_click(element: WebElement) -> bool:
     Scroll to element and click it.
     """
     try:
-        # noinspection PyStatementEffect
-        element.location_once_scrolled_into_view
         element.click()
         return True
     except (ElementNotInteractableException, ElementClickInterceptedException):

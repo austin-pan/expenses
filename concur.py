@@ -1,6 +1,7 @@
 import argparse
 import os
 import time
+import traceback
 from typing import List, Tuple
 
 import tqdm
@@ -103,7 +104,7 @@ def run(input_dir: str) -> None:
     try:
         print(f"Navigating to {concur_login_url}...")
         driver.get(concur_login_url)
-        print("> Please manually log into SAP Concor...")
+        print("> Please manually log into SAP Concur...")
 
         start_report_button = WebDriverWait(driver, 600).until(lambda d: d.find_element(
             By.LINK_TEXT, "Start a Report"
@@ -129,8 +130,8 @@ def run(input_dir: str) -> None:
             except NoSuchWindowException:
                 print("Exiting...")
                 break
-    except Exception as e:
-        print(repr(e))
+    except Exception:
+        traceback.print_exc()
         driver.save_full_page_screenshot(error_path)
         print(f"Error screenshot saved to {error_path}")
     finally:
