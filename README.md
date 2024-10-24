@@ -107,6 +107,9 @@ positional arguments:
 options:
   -h, --help            show this help message and exit
   -d DATE, --date DATE  optional. The date (MM/DD/YYYY) to stop crawling at, exclusive
+  -p PRICES, --prices PRICES
+                        optional. Comma-separated list of parking permit prices to restrict
+                        to, e.g. `5.50,2.75`
 ```
 
 #### Examples
