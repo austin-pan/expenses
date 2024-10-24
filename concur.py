@@ -72,12 +72,17 @@ def add_expenses(driver: WebDriver, input_dir: str) -> None:
     transactions = parse_transactions(input_dir)
     for transaction in tqdm.tqdm(transactions):
         add_expense_button = WebDriverWait(driver, 60).until(lambda d: d.find_element(
-            By.CSS_SELECTOR, 'span[data-trans-id="Expense.addExpense"]'
+            By.XPATH, "//button[contains(., 'Add Expense')]"
         ))
         crawl.scroll_and_click_element(driver, add_expense_button)
 
+        new_expense_button = WebDriverWait(driver, 60).until(lambda d: d.find_element(
+            By.XPATH, "//button[contains(., 'New Expense')]"
+        ))
+        crawl.scroll_and_click_element(driver, new_expense_button)
+
         parking_menu_item = WebDriverWait(driver, 60).until(lambda d: d.find_element(
-            By.CSS_SELECTOR, 'button.menu-category-item__button[data-nuiexp="TRANS-listItem-Parking"]'
+            By.XPATH, "//button[contains(., 'Parking')]"
         ))
         crawl.scroll_and_click_element(driver, parking_menu_item)
 
@@ -114,7 +119,7 @@ def run(input_dir: str) -> None:
         print("> Please populate expense report creation fields and submit action window...")
 
         WebDriverWait(driver, 60).until(lambda d: d.find_element(
-            By.CSS_SELECTOR, 'span[data-trans-id="Expense.addExpense"]'
+            By.XPATH, "//button[contains(., 'Add Expense')]"
         ))
         print("Adding expenses...")
         add_expenses(driver, input_dir)
