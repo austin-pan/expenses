@@ -139,5 +139,4 @@ if __name__ == "__main__":
     if cmd.date is not None and cmd.date.count("/") != 2:
         # Very poor way to check date format lol
         raise ValueError("Date must be in MM/DD/YYYY format.")
-    run(os.path.expanduser(cmd.output), cmd.date, cmd.prices)
-
+    run(os.path.abspath(os.path.expanduser(cmd.output)), cmd.date, cmd.prices)

@@ -58,8 +58,8 @@ python3.11 -m venv ~/.venv/expenses
 Activate and install required Python libraries into virtual environment
 
 ```shell
-source ~/.venv/expenses
-python3 -m pip install requirements.txt
+source ~/.venv/expenses/bin/activate
+python3 -m pip install -r requirements.txt
 ```
 
 

@@ -127,9 +127,9 @@ def run(input_dir: str) -> None:
         print("> Expenses successfully added! Close the browser window to exit.")
         while True:
             try:
-                # Repeatedly query the current website's title. If the window has been closed, querying the title will
-                # throw an exception that gets caught
-                # noinspection PyStatementEffect
+                # Repeatedly query the current website's title. If the window
+                # has been closed, querying the title will throw an exception
+                # that gets caught
                 driver.title
                 time.sleep(1)
             except NoSuchWindowException:
@@ -148,4 +148,4 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Create an SAP Concur expense report.")
     parser.add_argument("input", type=str, help="the directory with receipts to upload")
     cmd = parser.parse_args()
-    run(os.path.expanduser(cmd.input))
+    run(os.path.abspath(os.path.expanduser(cmd.input)))
