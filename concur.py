@@ -111,8 +111,12 @@ def run(input_dir: str) -> None:
         driver.get(concur_login_url)
         print("> Please manually log into SAP Concur...")
 
+        create_button = WebDriverWait(driver, 600).until(lambda d: d.find_element(
+            By.XPATH, "//button[contains(., 'Create')]"
+        ))
+        crawl.scroll_and_click_element(driver, create_button)
         start_report_button = WebDriverWait(driver, 600).until(lambda d: d.find_element(
-            By.LINK_TEXT, "Start a Report"
+            By.XPATH, "//a[contains(., 'Start a Report')]"
         ))
         print("Creating expense report...")
         crawl.scroll_and_click_element(driver, start_report_button)
