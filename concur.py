@@ -76,10 +76,10 @@ def add_expenses(driver: WebDriver, input_dir: str) -> None:
         ))
         crawl.scroll_and_click_element(driver, add_expense_button)
 
-        new_expense_button = WebDriverWait(driver, 60).until(lambda d: d.find_element(
-            By.XPATH, "//button[contains(., 'New Expense')]"
+        manual_expense_button = WebDriverWait(driver, 60).until(lambda d: d.find_element(
+            By.XPATH, "//button[contains(., 'Manually Create Expense')]"
         ))
-        crawl.scroll_and_click_element(driver, new_expense_button)
+        crawl.scroll_and_click_element(driver, manual_expense_button)
 
         parking_menu_item = WebDriverWait(driver, 60).until(lambda d: d.find_element(
             By.XPATH, "//button[contains(., 'Parking')]"
