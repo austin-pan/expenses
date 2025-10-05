@@ -18,8 +18,8 @@ error_path = "/tmp/expenses_error_screenshot.png"
 
 def parse_transactions(input_dir: str) -> List[Tuple[str, str, str]]:
     """
-    Get metadata of each order receipt in `input_dir`. This is done by parsing the filenames which are formatted as
-    "{order id}_{date}_{price}.png".
+    Get metadata of each order receipt in `input_dir`. This is done by parsing the
+    filenames which are formatted as "{order id}_{date}_{price}.png".
     """
     transactions = []
     for filename in os.listdir(input_dir):
@@ -34,7 +34,8 @@ def parse_transactions(input_dir: str) -> List[Tuple[str, str, str]]:
 
 def add_expense(driver: WebDriver, input_dir: str, transaction: Tuple[str, str, str]) -> None:
     """
-    Fill out an "Add Expense" popup. Fills out date and amount fields and uploads order receipt image.
+    Fill out an "Add Expense" popup. Fills out date and amount fields and uploads order
+    receipt image.
 
     :param driver: Current web driver
     :param input_dir: Directory where order receipt images are stored
@@ -62,8 +63,8 @@ def add_expense(driver: WebDriver, input_dir: str, transaction: Tuple[str, str, 
 
 def add_expenses(driver: WebDriver, input_dir: str) -> None:
     """
-    Add all expenses in `input_dir` to expense report. Each order is added as a separate "Parking" expense and is added
-    with transaction date, amount, and receipt image.
+    Add all expenses in `input_dir` to expense report. Each order is added as a
+    separate "Parking" expense and is added with transaction date, amount, and receipt image.
 
     :param driver: Current web driver
     :param input_dir: Directory with all order receipts to expense
@@ -71,10 +72,11 @@ def add_expenses(driver: WebDriver, input_dir: str) -> None:
     """
     transactions = parse_transactions(input_dir)
     for transaction in tqdm.tqdm(transactions):
-        add_expense_button = WebDriverWait(driver, 60).until(lambda d: d.find_element(
-            By.XPATH, "//button[contains(., 'Add Expense')]"
-        ))
-        crawl.scroll_and_click_element(driver, add_expense_button)
+        def add_expense_button_getter():
+            return WebDriverWait(driver, 60).until(lambda d: d.find_element(
+                By.XPATH, "//button[contains(., 'Add Expense') and not(@disabled)]"
+            ))
+        crawl.repeat_click_with_timeout(driver, add_expense_button_getter, 60)
 
         manual_expense_button = WebDriverWait(driver, 60).until(lambda d: d.find_element(
             By.XPATH, "//button[contains(., 'Manually Create Expense')]"
@@ -89,13 +91,18 @@ def add_expenses(driver: WebDriver, input_dir: str) -> None:
         add_expense(driver, input_dir, transaction)
         # Wait for receipt image to load
         WebDriverWait(driver, 60).until(lambda d: d.find_element(
-            By.CSS_SELECTOR, 'button[data-nuiexp="receipt-viewer__detach"]'
+            By.XPATH, "//button[contains(., 'Remove')]"
         ))
 
-        save_expense_button = WebDriverWait(driver, 60).until(lambda d: d.find_element(
-            By.CSS_SELECTOR, 'button[data-nuiexp="save-expense"]'
+        back_to_report_button = WebDriverWait(driver, 60).until(lambda d: d.find_element(
+            By.XPATH, "//button[contains(., 'Back to Report')]"
         ))
-        crawl.scroll_and_click_element(driver, save_expense_button)
+        crawl.scroll_and_click_element(driver, back_to_report_button)
+
+        save_and_continue_button = WebDriverWait(driver, 60).until(lambda d: d.find_element(
+            By.XPATH, "//button[contains(., 'Save & Continue')]"
+        ))
+        crawl.scroll_and_click_element(driver, save_and_continue_button)
 
 
 def run(input_dir: str) -> None:
@@ -134,7 +141,7 @@ def run(input_dir: str) -> None:
                 # Repeatedly query the current website's title. If the window
                 # has been closed, querying the title will throw an exception
                 # that gets caught
-                driver.title
+                _ = driver.title
                 time.sleep(1)
             except NoSuchWindowException:
                 print("Exiting...")

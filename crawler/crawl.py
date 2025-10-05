@@ -1,4 +1,5 @@
 import time
+from typing import Callable, Any
 
 from selenium import webdriver
 from selenium.common import ElementClickInterceptedException, ElementNotInteractableException
@@ -7,8 +8,8 @@ from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.wait import WebDriverWait
 
 # Copied from https://sqa.stackexchange.com/a/22199
-# Javascript for creating a custom element for uploading an image into, and then dragging and dropping that uploaded
-# image to into a specified element.
+# Javascript for creating a custom element for uploading an image into, and then
+# dragging and dropping that uploaded image to into a specified element.
 _js_drop_file = """
 var target = arguments[0],
     offsetX = arguments[1],
@@ -63,6 +64,30 @@ def get_comparable_date(date: str, sep: str) -> list[str]:
     date_parts = date.split(sep)
     # [YYYY, MM, DD]
     return [date_parts[date_part] for date_part in [2, 0, 1]]
+
+
+def repeat_click_with_timeout(driver: WebDriver, selector: Callable[[], Any], timeout: int):
+    """
+    Repeatedly clicks the selector element until the timeout is reached even if the click
+    fails. If the click succeeds, then early exit.
+
+    Args:
+        driver (WebDriver): Current web driver
+        selector (Callable[[], Any]): Function for selecting element to click
+        timeout (int): Timeout duration in seconds
+
+    Raises:
+        e: Exception that is raised on final failure of timeout duration
+    """
+    num_attempts = int(timeout / 0.25)
+    for i in range(num_attempts):
+        try:
+            element = selector()
+            scroll_and_click_element(driver, element)
+            break
+        except Exception as e:
+            if i == num_attempts - 1:
+                raise e
 
 
 def scroll_and_click_element(driver: WebDriver, element: WebElement) -> None:
